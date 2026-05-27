@@ -1,5 +1,5 @@
 `timescale 1s/100ms
-module testbench;
+module shifter_testbench;
   reg [31:0]number;
   reg [4:0]value;
   reg U, CLK;
@@ -9,7 +9,7 @@ module testbench;
 
   initial begin
     $dumpfile("wave.vcd");
-    $dumpvars(0, testbench);
+    $dumpvars(0, shifter_testbench);
 
     $monitor($time, " CLK = %b, U = %b, Value = %b, Shiftedby = %b, Final = %b", CLK, U, number, value, answer);
   end

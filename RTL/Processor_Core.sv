@@ -1,7 +1,11 @@
 `timescale 1ns/1ps
 //Wirename = Signal_driver_receiver
 module RV32I_Processor_Core (
-    input CLK, ProcessorReset //Active Low
+    input CLK, ProcessorReset, //Active Low
+    output [31:0]PC_OUT,
+    output [31:0]ALU_OUT,
+    output [31:0]INSTR_OUT
+    //Added these 3 outputs to run implementation
 );
 
 wire tPCSrc, tStallF, tStallD, tFlushF, tFlushD, tFlushE;
@@ -244,5 +248,9 @@ assign tResult_W_D =
     (tResultSrc_W == 3'b010) ? tALUResult_W :
     (tResultSrc_W == 3'b101) ? tPCPlus4_W :
     32'b0;
+    
+ assign PC_OUT = tPCF_F_IFB;
+ assign ALU_OUT = tALUResult_W;
+ assign INSTR_OUT = tinstruction_F_IFB;
     
 endmodule

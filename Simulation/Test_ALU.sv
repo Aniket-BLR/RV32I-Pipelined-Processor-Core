@@ -1,5 +1,5 @@
 `timescale 1s/100ms
-module testbench;
+module alu_testbench;
   // reg [31:0]RS1, RS2;
   // reg[2:0]Control;
   // wire [31:0]resultasauraus;
@@ -68,7 +68,7 @@ module testbench;
 
   initial begin
     $dumpfile("wave.vcd");
-    $dumpvars(0, testbench);
+    $dumpvars(0, alu_testbench);
 
     $monitor("CLK: %b, Load_cmd: %b, write: %d, read: %d, Flush: %b, tread = %b",CLK, Load_cmd, write, read, Flush, tread);
   end

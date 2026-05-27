@@ -1,12 +1,12 @@
 `timescale 1ns/1ps
-module testbench;
+module cpu_testbench;
     reg CLK, PReset;
 
     RV32I_Processor_Core Processor(.CLK(CLK), .ProcessorReset(PReset));
 
     initial begin
         $dumpfile("wave.vcd");
-        $dumpvars(0, testbench);
+        $dumpvars(0, cpu_testbench);
     end
 
     initial CLK = 0;

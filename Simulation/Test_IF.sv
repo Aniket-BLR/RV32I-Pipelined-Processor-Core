@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-module testbench;
+module ifstage_testbench;
     reg PCSrc, CLK, stallF, StallD, FlushD;
     reg [31:0]PCTargetE;
     wire [31:0]instruction, PCPlus4F, PCF, D_instruction, D_PCD, D_PCPlus4D;
@@ -8,7 +8,7 @@ module testbench;
 
     initial begin
         $dumpfile("wave.vcd");
-        $dumpvars(0, testbench);
+        $dumpvars(0, ifstage_testbench);
 
         //$monitor($time, " CLK = %b, PCSrc = %b, Target = %b, curr_PC = %b, MemFetched = %b, PC+4 = %b, stallF = %b", CLK, PCSrc, PCTargetE, PCF, instruction, PCPlus4F, stallF);
         $monitor($time, "CLK: %b, PCSrc: %b, Instruction Fetched: %b, curr_PC = %b, stallD = %b, FlushD = %b", CLK, PCSrc, D_instruction, D_PCD, StallD, FlushD);

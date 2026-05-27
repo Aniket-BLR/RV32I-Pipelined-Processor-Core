@@ -1,5 +1,5 @@
 `timescale 1s/100ms
-module testbench;
+module regfile_testbench;
   reg [4:0]A1, A2, A3;
   reg [31:0]data;
   reg CLK, Reg_Write, Reset;
@@ -8,7 +8,7 @@ module testbench;
 
   initial begin
     $dumpfile("wave.vcd");
-    $dumpvars(0, testbench);
+    $dumpvars(0, regfile_testbench);
 
     $monitor($time, " CLK = %b, A1 = %b, A2 = %b, A3 = %b, Data = %b, Write? = %b", CLK, A1, A2, A3, data, Reg_Write);
     $monitor($time, " OUTPUT, RS1 = %b, RS2 = %b", RS1, RS2);
