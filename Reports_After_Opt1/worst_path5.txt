@@ -1,0 +1,125 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
+| Date         : Thu May 28 11:41:14 2026
+| Host         : DESKTOP-05MHLTE running 64-bit major release  (build 9200)
+| Command      : report_timing -delay_type max -max_paths 1 -input_pins -file D:/Reports_After_Opt1/worst_path5.txt
+| Design       : RV32I_Processor_Core
+| Device       : 7k70t-fbv676
+| Speed File   : -1  PRODUCTION 1.12 2017-02-17
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -3.985ns  (required time - arrival time)
+  Source:                 M_WBuffer/M_W_RD/P5_5/D1/Q_reg/C
+                            (rising edge-triggered cell FDRE clocked by CLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            EX_MBuffer/EX_M_ALU_Result/P3/D1/Q_reg/D
+                            (rising edge-triggered cell FDRE clocked by CLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             CLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (CLK rise@10.000ns - CLK rise@0.000ns)
+  Data Path Delay:        13.990ns  (logic 1.342ns (9.593%)  route 12.648ns (90.407%))
+  Logic Levels:           17  (LUT2=6 LUT3=6 LUT5=1 LUT6=4)
+  Clock Path Skew:        -0.032ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    3.894ns = ( 13.894 - 10.000 ) 
+    Source Clock Delay      (SCD):    4.177ns
+    Clock Pessimism Removal (CPR):    0.251ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK rise edge)        0.000     0.000 r  
+    D23                                               0.000     0.000 r  CLK (IN)
+                         net (fo=0)                   0.000     0.000    CLK
+    D23                                                               r  CLK_IBUF_inst/I
+    D23                  IBUF (Prop_ibuf_I_O)         0.892     0.892 r  CLK_IBUF_inst/O
+                         net (fo=1, routed)           1.764     2.656    CLK_IBUF
+    BUFGCTRL_X0Y0                                                     r  CLK_IBUF_BUFG_inst/I
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.120     2.776 r  CLK_IBUF_BUFG_inst/O
+                         net (fo=1661, routed)        1.401     4.177    M_WBuffer/M_W_RD/P5_5/D1/CLK
+    SLICE_X8Y93          FDRE                                         r  M_WBuffer/M_W_RD/P5_5/D1/Q_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X8Y93          FDRE (Prop_fdre_C_Q)         0.308     4.485 r  M_WBuffer/M_W_RD/P5_5/D1/Q_reg/Q
+                         net (fo=34, routed)          0.942     5.427    HU/RDW[0]
+    SLICE_X9Y94                                                       r  HU/ForwardAE[0]_INST_0_i_2/I2
+    SLICE_X9Y94          LUT6 (Prop_lut6_I2_O)        0.053     5.480 r  HU/ForwardAE[0]_INST_0_i_2/O
+                         net (fo=2, routed)           0.455     5.935    HU/ForwardAE[0]_INST_0_i_2_n_0
+    SLICE_X9Y93                                                       r  HU/ForwardBE[0]_INST_0_i_1/I4
+    SLICE_X9Y93          LUT6 (Prop_lut6_I4_O)        0.053     5.988 r  HU/ForwardBE[0]_INST_0_i_1/O
+                         net (fo=1, routed)           0.454     6.441    HU/ForwardBE[0]_INST_0_i_1_n_0
+    SLICE_X11Y93                                                      r  HU/ForwardBE[0]_INST_0/I0
+    SLICE_X11Y93         LUT2 (Prop_lut2_I0_O)        0.053     6.494 r  HU/ForwardBE[0]_INST_0/O
+                         net (fo=32, routed)          2.036     8.531    ExecuteStage/ForwardBE[0]
+    SLICE_X18Y81                                                      r  ExecuteStage/WriteDataE[0]_INST_0/I1
+    SLICE_X18Y81         LUT5 (Prop_lut5_I1_O)        0.053     8.584 r  ExecuteStage/WriteDataE[0]_INST_0/O
+                         net (fo=2, routed)           0.674     9.257    ExecuteStage/WriteDataE[0]
+    SLICE_X16Y80                                                      r  ExecuteStage/EX_A_i_64/I1
+    SLICE_X16Y80         LUT3 (Prop_lut3_I1_O)        0.067     9.324 r  ExecuteStage/EX_A_i_64/O
+                         net (fo=34, routed)          1.475    10.799    ExecuteStage/EX_A/S1_ALU/Level_1_LOOP[31].M/s
+    SLICE_X14Y75                                                      r  ExecuteStage/EX_A/S1_ALU/Level_1_LOOP[31].M/c_INST_0/I1
+    SLICE_X14Y75         LUT3 (Prop_lut3_I1_O)        0.172    10.971 r  ExecuteStage/EX_A/S1_ALU/Level_1_LOOP[31].M/c_INST_0/O
+                         net (fo=3, routed)           0.480    11.451    ExecuteStage/EX_A/S1_ALU/C2/a
+    SLICE_X15Y75                                                      r  ExecuteStage/EX_A/S1_ALU/C2/c_INST_0/I1
+    SLICE_X15Y75         LUT2 (Prop_lut2_I1_O)        0.053    11.504 r  ExecuteStage/EX_A/S1_ALU/C2/c_INST_0/O
+                         net (fo=2, routed)           0.678    12.183    ExecuteStage/EX_A/S1_ALU/Level_2_LOOP[31].M2/a
+    SLICE_X14Y74                                                      r  ExecuteStage/EX_A/S1_ALU/Level_2_LOOP[31].M2/c_INST_0/I0
+    SLICE_X14Y74         LUT3 (Prop_lut3_I0_O)        0.053    12.236 r  ExecuteStage/EX_A/S1_ALU/Level_2_LOOP[31].M2/c_INST_0/O
+                         net (fo=3, routed)           0.268    12.503    ExecuteStage/EX_A/S1_ALU/C3/a
+    SLICE_X14Y75                                                      r  ExecuteStage/EX_A/S1_ALU/C3/c_INST_0/I1
+    SLICE_X14Y75         LUT2 (Prop_lut2_I1_O)        0.053    12.556 r  ExecuteStage/EX_A/S1_ALU/C3/c_INST_0/O
+                         net (fo=4, routed)           0.478    13.034    ExecuteStage/EX_A/S1_ALU/Level_3_LOOP[31].M3/a
+    SLICE_X15Y75                                                      r  ExecuteStage/EX_A/S1_ALU/Level_3_LOOP[31].M3/c_INST_0/I0
+    SLICE_X15Y75         LUT3 (Prop_lut3_I0_O)        0.053    13.087 r  ExecuteStage/EX_A/S1_ALU/Level_3_LOOP[31].M3/c_INST_0/O
+                         net (fo=3, routed)           0.582    13.669    ExecuteStage/EX_A/S1_ALU/C4/a
+    SLICE_X14Y75                                                      r  ExecuteStage/EX_A/S1_ALU/C4/c_INST_0/I1
+    SLICE_X14Y75         LUT2 (Prop_lut2_I1_O)        0.053    13.722 r  ExecuteStage/EX_A/S1_ALU/C4/c_INST_0/O
+                         net (fo=8, routed)           0.942    14.664    ExecuteStage/EX_A/S1_ALU/Level_4_LOOP[31].M4/a
+    SLICE_X14Y76                                                      r  ExecuteStage/EX_A/S1_ALU/Level_4_LOOP[31].M4/c_INST_0/I0
+    SLICE_X14Y76         LUT3 (Prop_lut3_I0_O)        0.053    14.717 r  ExecuteStage/EX_A/S1_ALU/Level_4_LOOP[31].M4/c_INST_0/O
+                         net (fo=3, routed)           0.467    15.184    ExecuteStage/EX_A/S1_ALU/C5/a
+    SLICE_X13Y77                                                      r  ExecuteStage/EX_A/S1_ALU/C5/c_INST_0/I1
+    SLICE_X13Y77         LUT2 (Prop_lut2_I1_O)        0.053    15.237 r  ExecuteStage/EX_A/S1_ALU/C5/c_INST_0/O
+                         net (fo=16, routed)          0.844    16.081    ExecuteStage/EX_A/S1_ALU/Level_5_LOOP[29].M5/a
+    SLICE_X17Y78                                                      r  ExecuteStage/EX_A/S1_ALU/Level_5_LOOP[29].M5/c_INST_0/I0
+    SLICE_X17Y78         LUT3 (Prop_lut3_I0_O)        0.053    16.134 r  ExecuteStage/EX_A/S1_ALU/Level_5_LOOP[29].M5/c_INST_0/O
+                         net (fo=2, routed)           0.856    16.990    ExecuteStage/EX_A/shiftinternal1[29]
+    SLICE_X19Y86                                                      r  ExecuteStage/EX_A/ALU_Result[29]_INST_0_i_1/I4
+    SLICE_X19Y86         LUT6 (Prop_lut6_I4_O)        0.053    17.043 r  ExecuteStage/EX_A/ALU_Result[29]_INST_0_i_1/O
+                         net (fo=1, routed)           0.359    17.402    ExecuteStage/EX_A/ALU_Result[29]_INST_0_i_1_n_0
+    SLICE_X18Y86                                                      r  ExecuteStage/EX_A/ALU_Result[29]_INST_0/I0
+    SLICE_X18Y86         LUT6 (Prop_lut6_I0_O)        0.053    17.455 r  ExecuteStage/EX_A/ALU_Result[29]_INST_0/O
+                         net (fo=1, routed)           0.659    18.114    EX_MBuffer/EX_M_ALU_Result/P3/D1/D
+    SLICE_X18Y89                                                      r  EX_MBuffer/EX_M_ALU_Result/P3/D1/Q_i_1/I1
+    SLICE_X18Y89         LUT2 (Prop_lut2_I1_O)        0.053    18.167 r  EX_MBuffer/EX_M_ALU_Result/P3/D1/Q_i_1/O
+                         net (fo=1, routed)           0.000    18.167    EX_MBuffer/EX_M_ALU_Result/P3/D1/Q_i_1_n_0
+    SLICE_X18Y89         FDRE                                         r  EX_MBuffer/EX_M_ALU_Result/P3/D1/Q_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK rise edge)       10.000    10.000 r  
+    D23                                               0.000    10.000 r  CLK (IN)
+                         net (fo=0)                   0.000    10.000    CLK
+    D23                                                               r  CLK_IBUF_inst/I
+    D23                  IBUF (Prop_ibuf_I_O)         0.815    10.815 r  CLK_IBUF_inst/O
+                         net (fo=1, routed)           1.679    12.494    CLK_IBUF
+    BUFGCTRL_X0Y0                                                     r  CLK_IBUF_BUFG_inst/I
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.113    12.607 r  CLK_IBUF_BUFG_inst/O
+                         net (fo=1661, routed)        1.287    13.894    EX_MBuffer/EX_M_ALU_Result/P3/D1/CLK
+    SLICE_X18Y89         FDRE                                         r  EX_MBuffer/EX_M_ALU_Result/P3/D1/Q_reg/C
+                         clock pessimism              0.251    14.145    
+                         clock uncertainty           -0.035    14.110    
+    SLICE_X18Y89         FDRE (Setup_fdre_C_D)        0.072    14.182    EX_MBuffer/EX_M_ALU_Result/P3/D1/Q_reg
+  -------------------------------------------------------------------
+                         required time                         14.182    
+                         arrival time                         -18.167    
+  -------------------------------------------------------------------
+                         slack                                 -3.985    
+
+
+
+

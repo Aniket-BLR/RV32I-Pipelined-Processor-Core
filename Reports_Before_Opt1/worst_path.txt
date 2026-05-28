@@ -1,0 +1,209 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
+| Date         : Thu May 28 09:47:10 2026
+| Host         : DESKTOP-05MHLTE running 64-bit major release  (build 9200)
+| Command      : report_timing -delay_type max -max_paths 1 -input_pins -file D:/Reports_Before_Opt1/worst_path.txt
+| Design       : RV32I_Processor_Core
+| Device       : 7k70t-fbv676
+| Speed File   : -1  PRODUCTION 1.12 2017-02-17
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -23.157ns  (required time - arrival time)
+  Source:                 M_WBuffer/M_W_RD/P5_5/D1/Q_reg/C
+                            (rising edge-triggered cell FDRE clocked by CLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            D_EXBuffer/D_EX_RD2/P23/D1/Q_reg/D
+                            (rising edge-triggered cell FDRE clocked by CLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             CLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (CLK rise@10.000ns - CLK rise@0.000ns)
+  Data Path Delay:        33.125ns  (logic 2.786ns (8.411%)  route 30.339ns (91.589%))
+  Logic Levels:           45  (LUT2=4 LUT3=33 LUT4=3 LUT5=2 LUT6=3)
+  Clock Path Skew:        -0.032ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.086ns = ( 14.086 - 10.000 ) 
+    Source Clock Delay      (SCD):    4.371ns
+    Clock Pessimism Removal (CPR):    0.253ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK rise edge)        0.000     0.000 r  
+    D23                                               0.000     0.000 r  CLK (IN)
+                         net (fo=0)                   0.000     0.000    CLK
+    D23                                                               r  CLK_IBUF_inst/I
+    D23                  IBUF (Prop_ibuf_I_O)         0.892     0.892 r  CLK_IBUF_inst/O
+                         net (fo=1, routed)           1.764     2.656    CLK_IBUF
+    BUFGCTRL_X0Y0                                                     r  CLK_IBUF_BUFG_inst/I
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.120     2.776 r  CLK_IBUF_BUFG_inst/O
+                         net (fo=1661, routed)        1.595     4.371    M_WBuffer/M_W_RD/P5_5/D1/CLK
+    SLICE_X15Y40         FDRE                                         r  M_WBuffer/M_W_RD/P5_5/D1/Q_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X15Y40         FDRE (Prop_fdre_C_Q)         0.269     4.640 r  M_WBuffer/M_W_RD/P5_5/D1/Q_reg/Q
+                         net (fo=34, routed)          1.283     5.923    HU/RDW[0]
+    SLICE_X15Y37                                                      r  HU/ForwardAE[0]_INST_0_i_2/I2
+    SLICE_X15Y37         LUT6 (Prop_lut6_I2_O)        0.053     5.976 r  HU/ForwardAE[0]_INST_0_i_2/O
+                         net (fo=2, routed)           0.418     6.395    HU/ForwardAE[0]_INST_0_i_2_n_0
+    SLICE_X15Y38                                                      r  HU/ForwardBE[0]_INST_0_i_1/I4
+    SLICE_X15Y38         LUT6 (Prop_lut6_I4_O)        0.053     6.448 r  HU/ForwardBE[0]_INST_0_i_1/O
+                         net (fo=1, routed)           0.237     6.684    HU/ForwardBE[0]_INST_0_i_1_n_0
+    SLICE_X17Y38                                                      r  HU/ForwardBE[0]_INST_0/I0
+    SLICE_X17Y38         LUT2 (Prop_lut2_I0_O)        0.053     6.737 r  HU/ForwardBE[0]_INST_0/O
+                         net (fo=32, routed)          1.467     8.205    ExecuteStage/ForwardBE[0]
+    SLICE_X30Y41                                                      r  ExecuteStage/WriteDataE[0]_INST_0/I1
+    SLICE_X30Y41         LUT5 (Prop_lut5_I1_O)        0.053     8.258 r  ExecuteStage/WriteDataE[0]_INST_0/O
+                         net (fo=2, routed)           0.838     9.095    ExecuteStage/WriteDataE[0]
+    SLICE_X29Y45                                                      r  ExecuteStage/EX_A_i_64/I1
+    SLICE_X29Y45         LUT3 (Prop_lut3_I1_O)        0.053     9.148 r  ExecuteStage/EX_A_i_64/O
+                         net (fo=34, routed)          0.455     9.604    ExecuteStage/EX_A/B[0]
+    SLICE_X30Y46                                                      r  ExecuteStage/EX_A/AdderCore_ALU_i_32/I1
+    SLICE_X30Y46         LUT2 (Prop_lut2_I1_O)        0.069     9.673 r  ExecuteStage/EX_A/AdderCore_ALU_i_32/O
+                         net (fo=2, routed)           0.415    10.088    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[0].FA/S1
+    SLICE_X31Y46                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[0].FA/Cout_INST_0/I0
+    SLICE_X31Y46         LUT3 (Prop_lut3_I0_O)        0.169    10.257 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[0].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.355    10.612    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[1].FA/Cin
+    SLICE_X30Y46                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[1].FA/Cout_INST_0/I2
+    SLICE_X30Y46         LUT3 (Prop_lut3_I2_O)        0.053    10.665 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[1].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.457    11.121    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[2].FA/Cin
+    SLICE_X31Y46                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[2].FA/Cout_INST_0/I2
+    SLICE_X31Y46         LUT3 (Prop_lut3_I2_O)        0.053    11.174 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[2].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.553    11.728    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[3].FA/Cin
+    SLICE_X28Y45                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[3].FA/Cout_INST_0/I2
+    SLICE_X28Y45         LUT3 (Prop_lut3_I2_O)        0.053    11.781 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[3].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.419    12.200    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[4].FA/Cin
+    SLICE_X26Y44                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[4].FA/Cout_INST_0/I2
+    SLICE_X26Y44         LUT3 (Prop_lut3_I2_O)        0.053    12.253 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[4].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.236    12.489    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[5].FA/Cin
+    SLICE_X25Y44                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[5].FA/Cout_INST_0/I2
+    SLICE_X25Y44         LUT3 (Prop_lut3_I2_O)        0.053    12.542 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[5].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.578    13.120    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[6].FA/Cin
+    SLICE_X26Y43                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[6].FA/Cout_INST_0/I2
+    SLICE_X26Y43         LUT3 (Prop_lut3_I2_O)        0.053    13.173 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[6].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.724    13.897    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[7].FA/Cin
+    SLICE_X21Y42                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[7].FA/Cout_INST_0/I2
+    SLICE_X21Y42         LUT3 (Prop_lut3_I2_O)        0.053    13.950 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[7].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.467    14.417    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[8].FA/Cin
+    SLICE_X21Y42                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[8].FA/Cout_INST_0/I2
+    SLICE_X21Y42         LUT3 (Prop_lut3_I2_O)        0.053    14.470 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[8].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.684    15.154    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[9].FA/Cin
+    SLICE_X19Y41                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[9].FA/Cout_INST_0/I2
+    SLICE_X19Y41         LUT3 (Prop_lut3_I2_O)        0.053    15.207 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[9].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.238    15.445    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[10].FA/Cin
+    SLICE_X19Y42                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[10].FA/Cout_INST_0/I2
+    SLICE_X19Y42         LUT3 (Prop_lut3_I2_O)        0.053    15.498 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[10].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.477    15.976    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[11].FA/Cin
+    SLICE_X14Y42                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[11].FA/Cout_INST_0/I2
+    SLICE_X14Y42         LUT3 (Prop_lut3_I2_O)        0.053    16.029 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[11].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.556    16.585    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[12].FA/Cin
+    SLICE_X14Y43                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[12].FA/Cout_INST_0/I2
+    SLICE_X14Y43         LUT3 (Prop_lut3_I2_O)        0.053    16.638 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[12].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.232    16.869    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[13].FA/Cin
+    SLICE_X13Y43                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[13].FA/Cout_INST_0/I2
+    SLICE_X13Y43         LUT3 (Prop_lut3_I2_O)        0.053    16.922 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[13].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.555    17.478    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[14].FA/Cin
+    SLICE_X12Y44                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[14].FA/Cout_INST_0/I2
+    SLICE_X12Y44         LUT3 (Prop_lut3_I2_O)        0.053    17.531 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[14].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.323    17.854    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[15].FA/Cin
+    SLICE_X12Y43                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[15].FA/Cout_INST_0/I2
+    SLICE_X12Y43         LUT3 (Prop_lut3_I2_O)        0.053    17.907 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[15].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.682    18.588    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[16].FA/Cin
+    SLICE_X11Y42                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[16].FA/Cout_INST_0/I2
+    SLICE_X11Y42         LUT3 (Prop_lut3_I2_O)        0.053    18.641 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[16].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.467    19.108    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[17].FA/Cin
+    SLICE_X11Y42                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[17].FA/Cout_INST_0/I2
+    SLICE_X11Y42         LUT3 (Prop_lut3_I2_O)        0.053    19.161 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[17].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.559    19.720    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[18].FA/Cin
+    SLICE_X12Y41                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[18].FA/Cout_INST_0/I2
+    SLICE_X12Y41         LUT3 (Prop_lut3_I2_O)        0.053    19.773 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[18].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.145    19.918    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[19].FA/Cin
+    SLICE_X12Y41                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[19].FA/Cout_INST_0/I2
+    SLICE_X12Y41         LUT3 (Prop_lut3_I2_O)        0.053    19.971 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[19].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.558    20.528    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[20].FA/Cin
+    SLICE_X15Y41                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[20].FA/Cout_INST_0/I2
+    SLICE_X15Y41         LUT3 (Prop_lut3_I2_O)        0.053    20.581 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[20].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.137    20.718    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[21].FA/Cin
+    SLICE_X15Y41                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[21].FA/Cout_INST_0/I2
+    SLICE_X15Y41         LUT3 (Prop_lut3_I2_O)        0.053    20.771 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[21].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.415    21.186    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[22].FA/Cin
+    SLICE_X17Y41                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[22].FA/Cout_INST_0/I2
+    SLICE_X17Y41         LUT3 (Prop_lut3_I2_O)        0.053    21.239 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[22].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.467    21.706    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[23].FA/Cin
+    SLICE_X17Y41                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[23].FA/Cout_INST_0/I2
+    SLICE_X17Y41         LUT3 (Prop_lut3_I2_O)        0.053    21.759 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[23].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.300    22.059    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[24].FA/Cin
+    SLICE_X17Y42                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[24].FA/Cout_INST_0/I2
+    SLICE_X17Y42         LUT3 (Prop_lut3_I2_O)        0.053    22.112 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[24].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.366    22.478    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[25].FA/Cin
+    SLICE_X16Y43                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[25].FA/Cout_INST_0/I2
+    SLICE_X16Y43         LUT3 (Prop_lut3_I2_O)        0.053    22.531 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[25].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.425    22.956    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[26].FA/Cin
+    SLICE_X16Y44                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[26].FA/Cout_INST_0/I2
+    SLICE_X16Y44         LUT3 (Prop_lut3_I2_O)        0.053    23.009 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[26].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.467    23.475    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[27].FA/Cin
+    SLICE_X17Y44                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[27].FA/Cout_INST_0/I2
+    SLICE_X17Y44         LUT3 (Prop_lut3_I2_O)        0.053    23.528 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[27].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.739    24.267    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[28].FA/Cin
+    SLICE_X33Y46                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[28].FA/Cout_INST_0/I2
+    SLICE_X33Y46         LUT3 (Prop_lut3_I2_O)        0.053    24.320 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[28].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.409    24.730    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[29].FA/Cin
+    SLICE_X33Y47                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[29].FA/Cout_INST_0/I2
+    SLICE_X33Y47         LUT3 (Prop_lut3_I2_O)        0.053    24.783 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[29].FA/Cout_INST_0/O
+                         net (fo=2, routed)           0.142    24.925    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[30].FA/Cin
+    SLICE_X33Y47                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[30].FA/Cout_INST_0/I2
+    SLICE_X33Y47         LUT3 (Prop_lut3_I2_O)        0.053    24.978 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[30].FA/Cout_INST_0/O
+                         net (fo=4, routed)           0.363    25.341    ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[31].FA/Cin
+    SLICE_X32Y47                                                      r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[31].FA/R_INST_0/I0
+    SLICE_X32Y47         LUT3 (Prop_lut3_I0_O)        0.053    25.394 r  ExecuteStage/EX_A/AdderCore_ALU/FA_Loop[31].FA/R_INST_0/O
+                         net (fo=4, routed)           0.688    26.082    ExecuteStage/EX_A/r0[31]
+    SLICE_X33Y46                                                      r  ExecuteStage/EX_A/ALU_Flag_INST_0_i_9/I2
+    SLICE_X33Y46         LUT4 (Prop_lut4_I2_O)        0.053    26.135 r  ExecuteStage/EX_A/ALU_Flag_INST_0_i_9/O
+                         net (fo=1, routed)           0.696    26.831    ExecuteStage/EX_A/ALU_Flag_INST_0_i_9_n_0
+    SLICE_X18Y43                                                      r  ExecuteStage/EX_A/ALU_Flag_INST_0_i_4/I2
+    SLICE_X18Y43         LUT4 (Prop_lut4_I2_O)        0.053    26.884 r  ExecuteStage/EX_A/ALU_Flag_INST_0_i_4/O
+                         net (fo=1, routed)           0.764    27.648    ExecuteStage/EX_A/ALU_Flag_INST_0_i_4_n_0
+    SLICE_X28Y46                                                      r  ExecuteStage/EX_A/ALU_Flag_INST_0/I3
+    SLICE_X28Y46         LUT6 (Prop_lut6_I3_O)        0.053    27.701 f  ExecuteStage/EX_A/ALU_Flag_INST_0/O
+                         net (fo=2, routed)           0.992    28.693    HU/BFlag
+    SLICE_X15Y48                                                      f  HU/PCSrcE_INST_0/I1
+    SLICE_X15Y48         LUT4 (Prop_lut4_I1_O)        0.053    28.746 f  HU/PCSrcE_INST_0/O
+                         net (fo=33, routed)          3.555    32.301    HU/PCSrcE
+    SLICE_X8Y42                                                       f  HU/FlushE_INST_0/I4
+    SLICE_X8Y42          LUT5 (Prop_lut5_I4_O)        0.053    32.354 r  HU/FlushE_INST_0/O
+                         net (fo=1, routed)           0.442    32.796    D_EXBuffer/FlushE
+    SLICE_X8Y42                                                       r  D_EXBuffer/D_EX_RegW_i_1/I0
+    SLICE_X8Y42          LUT2 (Prop_lut2_I0_O)        0.053    32.849 r  D_EXBuffer/D_EX_RegW_i_1/O
+                         net (fo=191, routed)         4.594    37.443    D_EXBuffer/D_EX_RD2/P23/D1/R
+    SLICE_X21Y38                                                      r  D_EXBuffer/D_EX_RD2/P23/D1/Q_i_1/I0
+    SLICE_X21Y38         LUT2 (Prop_lut2_I0_O)        0.053    37.496 r  D_EXBuffer/D_EX_RD2/P23/D1/Q_i_1/O
+                         net (fo=1, routed)           0.000    37.496    D_EXBuffer/D_EX_RD2/P23/D1/Q_i_1_n_0
+    SLICE_X21Y38         FDRE                                         r  D_EXBuffer/D_EX_RD2/P23/D1/Q_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK rise edge)       10.000    10.000 r  
+    D23                                               0.000    10.000 r  CLK (IN)
+                         net (fo=0)                   0.000    10.000    CLK
+    D23                                                               r  CLK_IBUF_inst/I
+    D23                  IBUF (Prop_ibuf_I_O)         0.815    10.815 r  CLK_IBUF_inst/O
+                         net (fo=1, routed)           1.679    12.494    CLK_IBUF
+    BUFGCTRL_X0Y0                                                     r  CLK_IBUF_BUFG_inst/I
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.113    12.607 r  CLK_IBUF_BUFG_inst/O
+                         net (fo=1661, routed)        1.479    14.086    D_EXBuffer/D_EX_RD2/P23/D1/CLK
+    SLICE_X21Y38         FDRE                                         r  D_EXBuffer/D_EX_RD2/P23/D1/Q_reg/C
+                         clock pessimism              0.253    14.339    
+                         clock uncertainty           -0.035    14.304    
+    SLICE_X21Y38         FDRE (Setup_fdre_C_D)        0.035    14.339    D_EXBuffer/D_EX_RD2/P23/D1/Q_reg
+  -------------------------------------------------------------------
+                         required time                         14.339    
+                         arrival time                         -37.496    
+  -------------------------------------------------------------------
+                         slack                                -23.157    
+
+
+
+
