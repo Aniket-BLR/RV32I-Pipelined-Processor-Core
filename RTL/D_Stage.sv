@@ -135,7 +135,7 @@ assign funct3D = D_Instruction[14:12];
 
 endmodule
 
-module D_EX (
+module D_EX ( //FlushE displaying fo = 191. Eating 4ns. To generate a nop, we effectively need to make MemW and RegW = 0 and Branch/Jump = 0; 
     input CLK, FlushE, MegaResetD_EX, //Active Low Flushing BEWARE!!
     //Control Signals HERE
     input RegWD, BranchD, JumpD, MemWD, ALUSrcD, ALU_Sub_CtrlD, funct_7_5CD,
@@ -149,25 +149,25 @@ module D_EX (
     output [31:0]PCE, RD1E, RD2E, ExtImmE, PCPlus4E
 );
     
-    Bit32PIPORegister D_EX_PCD(.write(PCD), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(PCE));
-    Bit32PIPORegister D_EX_RD1(.write(RD1), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(RD1E));
-    Bit32PIPORegister D_EX_RD2(.write(RD2), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(RD2E));
-    Bit32PIPORegister D_EX_ExtImm(.write(ExtImmD), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(ExtImmE));
-    Bit32PIPORegister D_EX_PCPlus4(.write(PCPlus4D), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(PCPlus4E));
+    Bit32PIPORegister D_EX_PCD(.write(PCD), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(PCE));
+    Bit32PIPORegister D_EX_RD1(.write(RD1), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(RD1E));
+    Bit32PIPORegister D_EX_RD2(.write(RD2), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(RD2E));
+    Bit32PIPORegister D_EX_ExtImm(.write(ExtImmD), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(ExtImmE));
+    Bit32PIPORegister D_EX_PCPlus4(.write(PCPlus4D), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(PCPlus4E));
 
-    Bit5PIPORegister D_EX_RS1(.write(RS1D), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(RS1E));
-    Bit5PIPORegister D_EX_RS2(.write(RS2D), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(RS2E));
-    Bit5PIPORegister D_EX_RD(.write(RDD), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(RDE));
+    Bit5PIPORegister D_EX_RS1(.write(RS1D), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(RS1E));
+    Bit5PIPORegister D_EX_RS2(.write(RS2D), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(RS2E));
+    Bit5PIPORegister D_EX_RD(.write(RDD), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(RDE));
 
-    Bit3PIPORegister D_EX_ResultSrc(.write(ResultSrcD), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(ResultSrcE));
-    Bit3PIPORegister D_EX_ALUControl(.write(ALU_ControlD), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(ALU_ControlE));
-    Bit3PIPORegister D_EX_funct3(.write(funct3D), .Load_cmd(1'b1), .CLK(CLK), .Flush(FlushE & MegaResetD_EX), .read(funct3E));
+    Bit3PIPORegister D_EX_ResultSrc(.write(ResultSrcD), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(ResultSrcE));
+    Bit3PIPORegister D_EX_ALUControl(.write(ALU_ControlD), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(ALU_ControlE));
+    Bit3PIPORegister D_EX_funct3(.write(funct3D), .Load_cmd(1'b1), .CLK(CLK), .Flush(1'b1 & MegaResetD_EX), .read(funct3E));
 
-    PIPORegisterUnit D_EX_RegW(.W(RegWD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(RegWE)); //1
+    PIPORegisterUnit D_EX_RegW(.W(RegWD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(RegWE)); //1  MAINTAIN FLUSHE HERE!!
     PIPORegisterUnit D_EX_Branch(.W(BranchD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(BranchE)); //2
     PIPORegisterUnit D_EX_Jump(.W(JumpD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(JumpE)); //3
     PIPORegisterUnit D_EX_Mem(.W(MemWD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(MemWE));//4
-    PIPORegisterUnit D_EX_ALUSrc(.W(ALUSrcD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(ALUSrcE)); //5
-    PIPORegisterUnit D_EX_ALU_Sub_Ctrl(.W(ALU_Sub_CtrlD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(ALU_Sub_CtrlE)); //6
-    PIPORegisterUnit D_EX_funct_7_5C(.W(funct_7_5CD), .Ws(1'b1), .CLK(CLK), .Reset(FlushE & MegaResetD_EX), .R(funct_7_5CE));
+    PIPORegisterUnit D_EX_ALUSrc(.W(ALUSrcD), .Ws(1'b1), .CLK(CLK), .Reset(1'b1 & MegaResetD_EX), .R(ALUSrcE)); //5
+    PIPORegisterUnit D_EX_ALU_Sub_Ctrl(.W(ALU_Sub_CtrlD), .Ws(1'b1), .CLK(CLK), .Reset(1'b1 & MegaResetD_EX), .R(ALU_Sub_CtrlE)); //6
+    PIPORegisterUnit D_EX_funct_7_5C(.W(funct_7_5CD), .Ws(1'b1), .CLK(CLK), .Reset(1'b1 & MegaResetD_EX), .R(funct_7_5CE));
 endmodule

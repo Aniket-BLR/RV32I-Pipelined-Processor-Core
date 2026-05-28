@@ -37,8 +37,9 @@ module IF_D ( //StallD = 1 => Stalled!!
     output [31:0]D_instruction, D_PCD, D_PCPlus4D
 );
 
+//Again fo issue. Eating up 3ns.
 Bit32PIPORegister IF_D_Instructions(.write(IF_instruction), .Load_cmd(~StallD), .Flush(MegaResetIF_D & FlushD), .read(D_instruction), .CLK(CLK));
-Bit32PIPORegister IF_D_PCF(.write(IF_PCF), .Load_cmd(~StallD), .Flush(MegaResetIF_D & FlushD), .read(D_PCD), .CLK(CLK));
-Bit32PIPORegister IF_D_PCPlus4(.write(IF_PCPlus4), .Load_cmd(~StallD), .Flush(MegaResetIF_D & FlushD), .read(D_PCPlus4D), .CLK(CLK));
+Bit32PIPORegister IF_D_PCF(.write(IF_PCF), .Load_cmd(~StallD), .Flush(MegaResetIF_D), .read(D_PCD), .CLK(CLK));
+Bit32PIPORegister IF_D_PCPlus4(.write(IF_PCPlus4), .Load_cmd(~StallD), .Flush(MegaResetIF_D), .read(D_PCPlus4D), .CLK(CLK));
     
 endmodule
