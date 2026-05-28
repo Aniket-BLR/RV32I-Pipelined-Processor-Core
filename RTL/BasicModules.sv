@@ -3,34 +3,34 @@ CONTAINS:
 1)DLatch 2)DFlipFlopPosedge 3)MUX, Decoder, Reader.
 */
 `timescale 1ns/1ps
-module DLatch ( //Active Low Set Reset.
-    input D, S, R, CLK,
-    output Q, Qn
-);
+//module DLatch ( //Active Low Set Reset.
+//    input D, S, R, CLK,
+//    output Q, Qn
+//);
 
-// wire t1, t2;
-// assign t1 = ~(~(D & CLK) & Qn);
-// assign t2 = ~(~(~D & CLK) & Q);
-// assign Q = (t1 | ~S) & R;
-// assign Qn = t2 & S;
+//// wire t1, t2;
+//// assign t1 = ~(~(D & CLK) & Qn);
+//// assign t2 = ~(~(~D & CLK) & Q);
+//// assign Q = (t1 | ~S) & R;
+//// assign Qn = t2 & S;
 
-wire Dd;
-assign Dd = (D | ~S) & R;
-assign Q = ~(~(Dd & CLK) & Qn);
-assign Qn = ~(~(~Dd & CLK) & Q);
+//wire Dd;
+//assign Dd = (D | ~S) & R;
+//assign Q = ~(~(Dd & CLK) & Qn);
+//assign Qn = ~(~(~Dd & CLK) & Q);
     
-endmodule
+//endmodule
 
-module DFlipFlopPosedge ( //Active Low.
-    input D, CLK, S, R,
-    output Q, Qn
-);
+//module DFlipFlopPosedge ( //Active Low.
+//    input D, CLK, S, R,
+//    output Q, Qn
+//);
 
-wire Q1, Q2;
-DLatch D1(.D(D), .CLK(~CLK), .S(S), .R(R), .Q(Q1), .Qn(Q2));
-DLatch D2(.D(Q1), .CLK(CLK), .S(1'b1), .R(1'b1), .Q(Q), .Qn(Qn)); //CHANGED THIS!!!
+//wire Q1, Q2;
+//DLatch D1(.D(D), .CLK(~CLK), .S(S), .R(R), .Q(Q1), .Qn(Q2));
+//DLatch D2(.D(Q1), .CLK(CLK), .S(1'b1), .R(1'b1), .Q(Q), .Qn(Qn)); //CHANGED THIS!!!
     
-endmodule
+//endmodule
 
 module MUX2to1 (
     input [31:0]a, b,
@@ -39,6 +39,27 @@ module MUX2to1 (
 );
 
 assign c = s ? a : b; //s == 1 => a else b.
+    
+endmodule
+
+module DFlipFlopPosedge (
+    input D, CLK, S, R,
+    output reg Q,
+    output wire Qn
+);
+    // Real, hardware-optimized sequential logic
+    always @(posedge CLK) begin
+        if (~R) begin
+            Q <= 1'b0;
+        end else if (~S) begin
+            Q <= 1'b1;
+        end else begin
+            Q <= D;
+        end
+    end
+
+    // Maintain your Qn complement output line cleanly
+    assign Qn = ~Q;
     
 endmodule
 

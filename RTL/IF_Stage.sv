@@ -19,7 +19,11 @@ generate
     assign meminput[30] = 1'b0;
 endgenerate
 
-FullAdder32Bits FA_IF_Stage (.Op1(tPCF), .Op2(32'd4), .Cin(1'b0), .R(tPCPlus4));
+// MEGA OPTIMIZATION BEGINS
+assign tPCPlus4 = tPCF + 32'd4;
+// FullAdder32Bits FA_IF_Stage (.Op1(tPCF), .Op2(32'd4), .Cin(1'b0), .R(tPCPlus4));
+
+//MEGA OPTIMIZATION ENDS
 assign PCPlus4F = tPCPlus4;
 assign PCF = tPCF;
 

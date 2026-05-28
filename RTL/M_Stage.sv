@@ -200,122 +200,382 @@
 
 // endmodule
 
+//module DataMemory (
+//    input [31:0] address, WriteDataM,
+//    input [2:0] funct3M,
+//    input CLK, WE, 
+//    output reg [31:0] MemRead
+//);
+
+//    // 1024 bytes = 256 words of 32-bits
+//    (* ram_style = "block" *) reg [31:0] datamem [0:255];
+
+//    // Word address is the upper bits. Byte offset is the lower 2 bits.
+//    wire [7:0] word_addr = address[9:2];
+//    wire [1:0] byte_offset = address[1:0];
+
+//    // ---------------------------------------------------------
+//    // WRITE LOGIC (Byte-Steering into 32-bit Word)
+//    // ---------------------------------------------------------
+//    reg [3:0]  byte_we;
+//    reg [31:0] aligned_write_data;
+
+//    always @(*) begin
+//        byte_we = 4'b0000;
+//        aligned_write_data = 32'b0;
+        
+//        if (WE) begin
+//            case (funct3M)
+//                3'b000: begin // sb
+//                    byte_we = 4'b0001 << byte_offset;
+//                    aligned_write_data = {4{WriteDataM[7:0]}};
+//                end 
+//                3'b001: begin // sh
+//                    byte_we = (byte_offset[1]) ? 4'b1100 : 4'b0011;
+//                    aligned_write_data = {2{WriteDataM[15:0]}};
+//                end
+//                3'b010: begin // sw
+//                    byte_we = 4'b1111;
+//                    aligned_write_data = WriteDataM;
+//                end
+//                default: begin
+//                    byte_we = 4'b0000;
+//                    aligned_write_data = 32'b0;
+//                end
+//            endcase
+//        end
+//    end
+
+//    // Synchronous Write Process Block RAM
+//    always @(posedge CLK) begin
+//        if (byte_we[0]) datamem[word_addr][7:0]   <= aligned_write_data[7:0];
+//        if (byte_we[1]) datamem[word_addr][15:8]  <= aligned_write_data[15:8];
+//        if (byte_we[2]) datamem[word_addr][23:16] <= aligned_write_data[23:16];
+//        if (byte_we[3]) datamem[word_addr][31:24] <= aligned_write_data[31:24];
+//    end
+
+//    // ---------------------------------------------------------
+//    // READ LOGIC (With Write-First Hardware Bypass)
+//    // ---------------------------------------------------------
+//    reg [31:0] raw_word_read;
+//    reg [1:0]  byte_offset_reg;
+//    reg [2:0]  funct3M_reg;
+
+//    always @(posedge CLK) begin
+//        // If writing and reading the exact same address at the same time,
+//        // bypass the memory array matrix and pass the incoming write data
+//        // directly into our output register block (WRITE_FIRST emulation).
+//        if (WE && (byte_we != 4'b0000)) begin
+//            raw_word_read[7:0]   <= byte_we[0] ? aligned_write_data[7:0]   : datamem[word_addr][7:0];
+//            raw_word_read[15:8]  <= byte_we[1] ? aligned_write_data[15:8]  : datamem[word_addr][15:8];
+//            raw_word_read[23:16] <= byte_we[2] ? aligned_write_data[23:16] : datamem[word_addr][23:16];
+//            raw_word_read[31:24] <= byte_we[3] ? aligned_write_data[31:24] : datamem[word_addr][31:24];
+//        end else begin
+//            raw_word_read   <= datamem[word_addr];
+//        end
+        
+//        byte_offset_reg <= byte_offset;
+//        funct3M_reg     <= funct3M;
+//    end
+
+//    // Post-read multiplexing and sign extension
+//    always @(*) begin
+//        case (funct3M_reg)
+//            3'b000: begin // lb
+//                case (byte_offset_reg)
+//                    2'b00: MemRead = {{24{raw_word_read[7]}},  raw_word_read[7:0]};
+//                    2'b01: MemRead = {{24{raw_word_read[15]}}, raw_word_read[15:8]};
+//                    2'b10: MemRead = {{24{raw_word_read[23]}}, raw_word_read[23:16]};
+//                    2'b11: MemRead = {{24{raw_word_read[31]}}, raw_word_read[31:24]};
+//                    default: MemRead = 32'b0;
+//                endcase
+//            end
+//            3'b001: begin // lh
+//                if (byte_offset_reg[1])
+//                    MemRead = {{16{raw_word_read[31]}}, raw_word_read[31:16]};
+//                else
+//                    MemRead = {{16{raw_word_read[15]}}, raw_word_read[15:0]};
+//            end
+//            3'b010: begin // lw
+//                MemRead = raw_word_read;
+//            end
+//            3'b100: begin // lbu
+//                case (byte_offset_reg)
+//                    2'b00: MemRead = {24'b0, raw_word_read[7:0]};
+//                    2'b01: MemRead = {24'b0, raw_word_read[15:8]};
+//                    2'b10: MemRead = {24'b0, raw_word_read[23:16]};
+//                    2'b11: MemRead = {24'b0, raw_word_read[31:24]};
+//                    default: MemRead = 32'b0;
+//                endcase
+//            end
+//            3'b101: begin // lhu
+//                if (byte_offset_reg[1])
+//                    MemRead = {16'b0, raw_word_read[31:16]};
+//                else
+//                    MemRead = {16'b0, raw_word_read[15:0]};
+//            end
+//            default: begin
+//                MemRead = 32'b0;
+//            end
+//        endcase
+//    end
+
+//endmodule
+
 module DataMemory (
-    input [31:0] address, WriteDataM,
-    input [2:0] funct3M,
-    input CLK, WE, 
-    output reg [31:0] MemRead
+    input  wire        CLK,
+    input  wire        WE,
+
+    input  wire [31:0] address,
+    input  wire [31:0] WriteDataM,
+    input  wire [2:0]  funct3M,
+
+    output reg  [31:0] MemRead
 );
 
-    // 1024 bytes = 256 words of 32-bits
-    (* ram_style = "block" *) reg [31:0] datamem [0:255];
+    // =========================================================
+    // BLOCK RAM
+    // =========================================================
 
-    // Word address is the upper bits. Byte offset is the lower 2 bits.
-    wire [7:0] word_addr = address[9:2];
-    wire [1:0] byte_offset = address[1:0];
+    (* ram_style = "block" *)
+    reg [31:0] datamem [0:255];
 
-    // ---------------------------------------------------------
-    // WRITE LOGIC (Byte-Steering into 32-bit Word)
-    // ---------------------------------------------------------
+    wire [7:0] word_addr;
+    wire [1:0] byte_offset;
+
+    assign word_addr  = address[9:2];
+    assign byte_offset = address[1:0];
+
+    // =========================================================
+    // BYTE ENABLE + WRITE DATA ALIGNMENT
+    // =========================================================
+
     reg [3:0]  byte_we;
     reg [31:0] aligned_write_data;
 
     always @(*) begin
+
         byte_we = 4'b0000;
         aligned_write_data = 32'b0;
-        
-        if (WE) begin
-            case (funct3M)
-                3'b000: begin // sb
+
+        case (funct3M)
+
+            // -------------------------------------------------
+            // SB
+            // -------------------------------------------------
+
+            3'b000: begin
+
+                if (WE) begin
                     byte_we = 4'b0001 << byte_offset;
-                    aligned_write_data = {4{WriteDataM[7:0]}};
-                end 
-                3'b001: begin // sh
-                    byte_we = (byte_offset[1]) ? 4'b1100 : 4'b0011;
-                    aligned_write_data = {2{WriteDataM[15:0]}};
+                    aligned_write_data = WriteDataM << (8 * byte_offset);
                 end
-                3'b010: begin // sw
+
+            end
+
+            // -------------------------------------------------
+            // SH
+            // -------------------------------------------------
+
+            3'b001: begin
+
+                if (WE) begin
+
+                    case (byte_offset[1])
+
+                        1'b0: begin
+                            byte_we = 4'b0011;
+                            aligned_write_data = WriteDataM;
+                        end
+
+                        1'b1: begin
+                            byte_we = 4'b1100;
+                            aligned_write_data = WriteDataM << 16;
+                        end
+
+                    endcase
+
+                end
+
+            end
+
+            // -------------------------------------------------
+            // SW
+            // -------------------------------------------------
+
+            3'b010: begin
+
+                if (WE) begin
                     byte_we = 4'b1111;
                     aligned_write_data = WriteDataM;
                 end
-                default: begin
-                    byte_we = 4'b0000;
-                    aligned_write_data = 32'b0;
-                end
-            endcase
-        end
+
+            end
+
+            default: begin
+                byte_we = 4'b0000;
+                aligned_write_data = 32'b0;
+            end
+
+        endcase
     end
 
-    // Synchronous Write Process Block RAM
-    always @(posedge CLK) begin
-        if (byte_we[0]) datamem[word_addr][7:0]   <= aligned_write_data[7:0];
-        if (byte_we[1]) datamem[word_addr][15:8]  <= aligned_write_data[15:8];
-        if (byte_we[2]) datamem[word_addr][23:16] <= aligned_write_data[23:16];
-        if (byte_we[3]) datamem[word_addr][31:24] <= aligned_write_data[31:24];
-    end
+    // =========================================================
+    // BRAM READ/WRITE
+    // =========================================================
 
-    // ---------------------------------------------------------
-    // READ LOGIC (With Write-First Hardware Bypass)
-    // ---------------------------------------------------------
     reg [31:0] raw_word_read;
-    reg [1:0]  byte_offset_reg;
-    reg [2:0]  funct3M_reg;
+
+    reg [1:0] byte_offset_reg;
+    reg [2:0] funct3M_reg;
 
     always @(posedge CLK) begin
-        // If writing and reading the exact same address at the same time,
-        // bypass the memory array matrix and pass the incoming write data
-        // directly into our output register block (WRITE_FIRST emulation).
-        if (WE && (byte_we != 4'b0000)) begin
-            raw_word_read[7:0]   <= byte_we[0] ? aligned_write_data[7:0]   : datamem[word_addr][7:0];
-            raw_word_read[15:8]  <= byte_we[1] ? aligned_write_data[15:8]  : datamem[word_addr][15:8];
-            raw_word_read[23:16] <= byte_we[2] ? aligned_write_data[23:16] : datamem[word_addr][23:16];
-            raw_word_read[31:24] <= byte_we[3] ? aligned_write_data[31:24] : datamem[word_addr][31:24];
-        end else begin
-            raw_word_read   <= datamem[word_addr];
-        end
-        
+
+        // -----------------------------------------------------
+        // WRITE
+        // -----------------------------------------------------
+
+        if (byte_we[0])
+            datamem[word_addr][7:0] <= aligned_write_data[7:0];
+
+        if (byte_we[1])
+            datamem[word_addr][15:8] <= aligned_write_data[15:8];
+
+        if (byte_we[2])
+            datamem[word_addr][23:16] <= aligned_write_data[23:16];
+
+        if (byte_we[3])
+            datamem[word_addr][31:24] <= aligned_write_data[31:24];
+
+        // -----------------------------------------------------
+        // SYNCHRONOUS READ
+        // -----------------------------------------------------
+
+        raw_word_read <= datamem[word_addr];
+
+        // -----------------------------------------------------
+        // PIPELINE REGISTERS
+        // -----------------------------------------------------
+
         byte_offset_reg <= byte_offset;
-        funct3M_reg     <= funct3M;
+        funct3M_reg <= funct3M;
+
     end
 
-    // Post-read multiplexing and sign extension
+    // =========================================================
+    // LOAD FORMATTER
+    // =========================================================
+
     always @(*) begin
+
         case (funct3M_reg)
-            3'b000: begin // lb
+
+            // -------------------------------------------------
+            // LB
+            // -------------------------------------------------
+
+            3'b000: begin
+
                 case (byte_offset_reg)
-                    2'b00: MemRead = {{24{raw_word_read[7]}},  raw_word_read[7:0]};
-                    2'b01: MemRead = {{24{raw_word_read[15]}}, raw_word_read[15:8]};
-                    2'b10: MemRead = {{24{raw_word_read[23]}}, raw_word_read[23:16]};
-                    2'b11: MemRead = {{24{raw_word_read[31]}}, raw_word_read[31:24]};
+
+                    2'b00:
+                        MemRead = {{24{raw_word_read[7]}},
+                                    raw_word_read[7:0]};
+
+                    2'b01:
+                        MemRead = {{24{raw_word_read[15]}},
+                                    raw_word_read[15:8]};
+
+                    2'b10:
+                        MemRead = {{24{raw_word_read[23]}},
+                                    raw_word_read[23:16]};
+
+                    2'b11:
+                        MemRead = {{24{raw_word_read[31]}},
+                                    raw_word_read[31:24]};
+
+                    default:
+                        MemRead = 32'b0;
+
                 endcase
+
             end
-            3'b001: begin // lh
+
+            // -------------------------------------------------
+            // LH
+            // -------------------------------------------------
+
+            3'b001: begin
+
                 if (byte_offset_reg[1])
-                    MemRead = {{16{raw_word_read[31]}}, raw_word_read[31:16]};
+                    MemRead = {{16{raw_word_read[31]}},
+                                raw_word_read[31:16]};
                 else
-                    MemRead = {{16{raw_word_read[15]}}, raw_word_read[15:0]};
+                    MemRead = {{16{raw_word_read[15]}},
+                                raw_word_read[15:0]};
+
             end
-            3'b010: begin // lw
+
+            // -------------------------------------------------
+            // LW
+            // -------------------------------------------------
+
+            3'b010: begin
                 MemRead = raw_word_read;
             end
-            3'b100: begin // lbu
+
+            // -------------------------------------------------
+            // LBU
+            // -------------------------------------------------
+
+            3'b100: begin
+
                 case (byte_offset_reg)
-                    2'b00: MemRead = {24'b0, raw_word_read[7:0]};
-                    2'b01: MemRead = {24'b0, raw_word_read[15:8]};
-                    2'b10: MemRead = {24'b0, raw_word_read[23:16]};
-                    2'b11: MemRead = {24'b0, raw_word_read[31:24]};
+
+                    2'b00:
+                        MemRead = {24'b0,
+                                   raw_word_read[7:0]};
+
+                    2'b01:
+                        MemRead = {24'b0,
+                                   raw_word_read[15:8]};
+
+                    2'b10:
+                        MemRead = {24'b0,
+                                   raw_word_read[23:16]};
+
+                    2'b11:
+                        MemRead = {24'b0,
+                                   raw_word_read[31:24]};
+
+                    default:
+                        MemRead = 32'b0;
+
                 endcase
+
             end
-            3'b101: begin // lhu
+
+            // -------------------------------------------------
+            // LHU
+            // -------------------------------------------------
+
+            3'b101: begin
+
                 if (byte_offset_reg[1])
-                    MemRead = {16'b0, raw_word_read[31:16]};
+                    MemRead = {16'b0,
+                               raw_word_read[31:16]};
                 else
-                    MemRead = {16'b0, raw_word_read[15:0]};
+                    MemRead = {16'b0,
+                               raw_word_read[15:0]};
+
             end
+
             default: begin
                 MemRead = 32'b0;
             end
+
         endcase
+
     end
 
 endmodule

@@ -4,41 +4,43 @@ module RV32I_Processor_Core (
     input CLK, ProcessorReset, //Active Low
     output [31:0]PC_OUT,
     output [31:0]ALU_OUT,
-    output [31:0]INSTR_OUT
+    output [31:0]INSTR_OUT, 
+    output [31:0] RD1,
+    output [31:0] RD2
     //Added these 3 outputs to run implementation
 );
 
-wire tPCSrc, tStallF, tStallD, tFlushF, tFlushD, tFlushE;
-wire [31:0]tPCTarget_E_F,tinstruction_F_IFB, tPCPlus4_F_IFB, tPCF_F_IFB;
-wire [31:0]tinstruction_IFB_D, tPC_IFB_D, tPCPlus4_IFB_D;
+(* keep = "true" *) wire tPCSrc, tStallF, tStallD, tFlushF, tFlushD, tFlushE;
+(* keep = "true" *) wire [31:0]tPCTarget_E_F,tinstruction_F_IFB, tPCPlus4_F_IFB, tPCF_F_IFB;
+(* keep = "true" *) wire [31:0]tinstruction_IFB_D, tPC_IFB_D, tPCPlus4_IFB_D;
 
-wire [31:0]tPC_D_DB, tRD1_D_DB, tRD2_D_DB, tExtImm_D_DB, tPCPlus4_D_DB; 
-wire tRegW_D_DB, tMemW_D_DB, tJump_D_DB, tBranch_D_DB, tALUSrc_D_DB, tALUSubCtrl_D_DB, tfunct75_D_DB;
-wire [2:0]tResultSrc_D_DB, tALUCtrl_D_DB, tfunct3_D_DB;
-wire[4:0]tRS1_D_DBH, tRS2_D_DBH, tRD_D_DB;
+(* keep = "true" *) wire [31:0]tPC_D_DB, tRD1_D_DB, tRD2_D_DB, tExtImm_D_DB, tPCPlus4_D_DB; 
+(* keep = "true" *) wire tRegW_D_DB, tMemW_D_DB, tJump_D_DB, tBranch_D_DB, tALUSrc_D_DB, tALUSubCtrl_D_DB, tfunct75_D_DB;
+(* keep = "true" *) wire [2:0]tResultSrc_D_DB, tALUCtrl_D_DB, tfunct3_D_DB;
+(* keep = "true" *) wire[4:0]tRS1_D_DBH, tRS2_D_DBH, tRD_D_DB;
 
-wire tRegW_DB_EBH, tMemW_DB_EB, tBranch_DB_H, tJump_DB_H, tALUSrc_DB_E, tALUSubCtrl_DB_E, tfunct75_DB_E;
-wire [2:0]tResultSrc_DB_EBH, tALUCtrl_DB_E, tfunct3_DB_EB;
-wire [4:0]tRS1_DB_H, tRS2_DB_H, tRD_DB_EBH; 
-wire [31:0]tPC_DB_E, tRD1_DB_E, tRD2_DB_E, tPCPlus4_DB_EB, tImmExt_DB_EBE;
+(* keep = "true" *) wire tRegW_DB_EBH, tMemW_DB_EB, tBranch_DB_H, tJump_DB_H, tALUSrc_DB_E, tALUSubCtrl_DB_E, tfunct75_DB_E;
+(* keep = "true" *) wire [2:0]tResultSrc_DB_EBH, tALUCtrl_DB_E, tfunct3_DB_EB;
+(* keep = "true" *) wire [4:0]tRS1_DB_H, tRS2_DB_H, tRD_DB_EBH; 
+(* keep = "true" *)wire [31:0]tPC_DB_E, tRD1_DB_E, tRD2_DB_E, tPCPlus4_DB_EB, tImmExt_DB_EBE;
 
-wire [1:0]tForwardAE_H_E, tForwardBE_H_E;
-wire [31:0]tALUResult_M_E, tWriteData_E_EB, tALUResult_E_EB;
-wire tBFlag_E_H;
+(* keep = "true" *) wire [1:0]tForwardAE_H_E, tForwardBE_H_E;
+(* keep = "true" *)wire [31:0]tALUResult_M_E, tWriteData_E_EB, tALUResult_E_EB;
+(* keep = "true" *)wire tBFlag_E_H;
 
-wire tRegW_EB_MBH, tMemW_EB_M;
-wire [2:0]tResultSrc_EB_MB, tfunct3_EB_M;
-wire [4:0]tRD_EB_MBH;
-wire [31:0]tPCPlus4_EB_MB, tWriteData_EB_M, tPCTarget_EB_MB, tExtImm_EB_MB;
+(* keep = "true" *)wire tRegW_EB_MBH, tMemW_EB_M;
+(* keep = "true" *)wire [2:0]tResultSrc_EB_MB, tfunct3_EB_M;
+(* keep = "true" *)wire [4:0]tRD_EB_MBH;
+(* keep = "true" *)wire [31:0]tPCPlus4_EB_MB, tWriteData_EB_M, tPCTarget_EB_MB, tExtImm_EB_MB;
 
-wire [31:0]tMemRead_M_MB;
+(* keep = "true" *)wire [31:0]tMemRead_M_MB;
 
-wire [31:0]tResult_W_D, tMemRead_W, tPCPlus4_W, tALUResult_W, tPCTarget_W, tExtImm_W; //REMEMBER! 
-wire [2:0]tResultSrc_W;
-wire [4:0]tRD_W_DH; 
-wire tRegW_W_DH; 
+(* keep = "true" *)wire [31:0]tResult_W_D, tMemRead_W, tPCPlus4_W, tALUResult_W, tPCTarget_W, tExtImm_W; //REMEMBER! 
+(* keep = "true" *)wire [2:0]tResultSrc_W;
+(* keep = "true" *)wire [4:0]tRD_W_DH; 
+(* keep = "true" *)wire tRegW_W_DH; 
 
-IF FetchStage(
+(* dont_touch = "true" *)IF FetchStage(
     .MegaResetIF(ProcessorReset), //1bit
     .PCSrc(tPCSrc), //1bit 
     .CLK(CLK), //1bit
@@ -50,7 +52,7 @@ IF FetchStage(
     .PCF(tPCF_F_IFB) //32bit
     );
 
-IF_D IF_DBuffer(
+(* dont_touch = "true" *)IF_D IF_DBuffer(
     .MegaResetIF_D(ProcessorReset), //1bit
     .CLK(CLK), //1bit
     .StallD(tStallD), //1bit
@@ -64,7 +66,7 @@ IF_D IF_DBuffer(
     .D_PCPlus4D(tPCPlus4_IFB_D) //32bit
 );
 
-D DecodeStage(
+(* dont_touch = "true" *)D DecodeStage(
     .D_Instruction(tinstruction_IFB_D), //32bit
     .D_PCD(tPC_IFB_D), //32bit
     .D_PCPlus4D(tPCPlus4_IFB_D), //32bit
@@ -93,7 +95,7 @@ D DecodeStage(
     .RDD(tRD_D_DB) //5bit
 );
 
-D_EX D_EXBuffer(
+(* dont_touch = "true" *)D_EX D_EXBuffer(
     .MegaResetD_EX(ProcessorReset), //1bit
     .CLK(CLK), //1bit
     .FlushE(tFlushE), //1bit
@@ -136,7 +138,7 @@ D_EX D_EXBuffer(
     .PCPlus4E(tPCPlus4_DB_EB) //32bit
 );
 
-EX ExecuteStage(
+(* dont_touch = "true" *)EX ExecuteStage(
     .ALU_ResultM(tALUResult_M_E), //32bit
     .ResultW(tResult_W_D), //32bit
     .RD1E(tRD1_DB_E), //32bit
@@ -156,7 +158,7 @@ EX ExecuteStage(
     .BFlag(tBFlag_E_H) //1bit
 );
 
-EX_M EX_MBuffer(
+(* dont_touch = "true" *)EX_M EX_MBuffer(
     .MegaResetEX_M(ProcessorReset), //1bit
     .RegWE(tRegW_DB_EBH), //1bit
     .CLK(CLK), //1bit
@@ -182,7 +184,7 @@ EX_M EX_MBuffer(
     .ExtImmM(tExtImm_EB_MB) //32bit
 );
 
-DataMemory MemoryStage(
+(* dont_touch = "true" *)DataMemory MemoryStage(
     .address(tALUResult_M_E), //32bit
     .WriteDataM(tWriteData_EB_M), //32bit
     .funct3M(tfunct3_EB_M), //3bit
@@ -192,7 +194,7 @@ DataMemory MemoryStage(
     .MemRead(tMemRead_M_MB) //32bit reg or something.
 );
 
-M_W M_WBuffer(
+(* dont_touch = "true" *)M_W M_WBuffer(
     .CLK(CLK), //1bit
     .MegaResetM_W(ProcessorReset), //1bit
     .MemRead(tMemRead_M_MB), //32bit
@@ -214,7 +216,7 @@ M_W M_WBuffer(
     .RegWW(tRegW_W_DH) //1bit
 );
 
-HazardUnit HU(
+(* dont_touch = "true" *)HazardUnit HU(
     .PCSrcReset(ProcessorReset), //1bit
     .RDE(tRD_DB_EBH), //5bit
     .RS1E(tRS1_DB_H), //5bit
@@ -252,5 +254,7 @@ assign tResult_W_D =
  assign PC_OUT = tPCF_F_IFB;
  assign ALU_OUT = tALUResult_W;
  assign INSTR_OUT = tinstruction_F_IFB;
+ assign RD1 = tRD1_D_DB;
+ assign RD2 = tRD2_D_DB;
     
 endmodule

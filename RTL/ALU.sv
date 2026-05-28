@@ -14,8 +14,32 @@ wire ef, nef, bgef, bltf, bgeuf, bltuf; //Flags for the B-Type.
 
 //r0 contains add/sub result. 000.  
 assign t1 = ALU_Sub_Ctrl ? ~B : B;
-FullAdder32Bits AdderCore_ALU(.Op1(A), .Op2(t1), .Cin(ALU_Sub_Ctrl), .Cout(Cout), .CinMSB(CinMSB), .R(r0));
+
+//OPTIMIZATION ATTEMPT1 BEGINS
+
+//Full Adder32bits seems to be causing terrible delay in the path. This is attempt 1 to optimize it.
+wire [31:0] intermediate_result;
+wire [30:0] int_a;
+wire [30:0] int_b;
+genvar a;
+for (a = 0; a < 31; a = a + 1) begin
+    assign int_a[a] = A[a]; 
+end
+
+genvar b;
+for (b = 0; b < 31; b = b + 1) begin
+    assign int_b[b] = t1[b]; 
+end
+
+assign intermediate_result = int_a + int_b + ALU_Sub_Ctrl;
+assign CinMSB = intermediate_result[31];
+wire MSB;
+assign {Cout, MSB} = CinMSB + A[31] + t1[31];
+assign r0 = {MSB, intermediate_result[30:0]};
+//FullAdder32Bits AdderCore_ALU(.Op1(A), .Op2(t1), .Cin(ALU_Sub_Ctrl), .Cout(Cout), .CinMSB(CinMSB), .R(r0));
 assign Overflow = Cout ^ CinMSB;
+
+//OPTIMIZATION ATTEMPT1 ENDS
 
 // r2 contains SLT/U. //011 and 010
 assign r2[0] = ALU_Control[0] ? ~Cout : (r0[31] ^ Overflow);

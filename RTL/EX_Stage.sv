@@ -26,7 +26,8 @@ assign WriteDataE = SrcBEi;
 assign SrcBE = ALUSrcE ? ExtImmE : SrcBEi; //This finally goes into ALU.
 
 ALU EX_A(.funct_7_5(funct_7_5CE), .ALU_Sub_Ctrl(ALU_Sub_CtrlE), .A(SrcAE), .B(SrcBE), .ALU_Control(ALU_ControlE), .ALU_Result(ALU_ResultE), .ALU_Flag(BFlag));
-FullAdder32Bits FA_EX(.Op1(PCE), .Op2(ExtImmE), .Cin(1'b0), .R(PCTargetE));
+assign PCTargetE = PCE + ExtImmE; //OPTIMIZED HERE!!
+//FullAdder32Bits FA_EX(.Op1(PCE), .Op2(ExtImmE), .Cin(1'b0), .R(PCTargetE));
     
 endmodule
 
