@@ -18,6 +18,6 @@ module cpu_testbench;
 
     initial begin
         #2 PReset = 1'b1;
-        #40 $finish;
+        #60 $finish;
     end
 endmodule

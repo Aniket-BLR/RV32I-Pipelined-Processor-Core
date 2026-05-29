@@ -32,7 +32,7 @@ assign PCTargetE = PCE + ExtImmE; //OPTIMIZED HERE!!
 endmodule
 
 module EX_M (
-    input RegWE, MemWE, CLK, MegaResetEX_M, //BEWARE
+    input RegWE, MemWE, CLK, MegaResetEX_M, FlushM, //BEWARE
     input [2:0]ResultSrcE, funct3E,
     input [31:0]PCPlus4E, WriteDataE, ALU_ResultE, PCTargetE, ExtImmE,
     input [4:0]RDE,
@@ -42,8 +42,8 @@ module EX_M (
     output[31:0]PCPlus4M, WriteDataM, ALU_ResultM, PCTargetM, ExtImmM
 );
 
-PIPORegisterUnit EX_M_RegW(.W(RegWE), .Ws(1'b1), .CLK(CLK), .Reset(MegaResetEX_M), .R(RegWM));
-PIPORegisterUnit EX_M_MemW(.W(MemWE), .Ws(1'b1), .CLK(CLK), .Reset(MegaResetEX_M), .R(MemWM));
+PIPORegisterUnit EX_M_RegW(.W(RegWE), .Ws(1'b1), .CLK(CLK), .Reset(FlushM & MegaResetEX_M), .R(RegWM));
+PIPORegisterUnit EX_M_MemW(.W(MemWE), .Ws(1'b1), .CLK(CLK), .Reset(FlushM & MegaResetEX_M), .R(MemWM));
 
 Bit3PIPORegister EX_M_ResultSrc(.write(ResultSrcE), .Load_cmd(1'b1), .CLK(CLK), .Flush(MegaResetEX_M), .read(ResultSrcM));
 Bit3PIPORegister EX_M_funct3(.write(funct3E), .Load_cmd(1'b1), .CLK(CLK), .Flush(MegaResetEX_M), .read(funct3M));
