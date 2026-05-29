@@ -13,7 +13,7 @@ initial begin
 end
 
 initial begin
-    $readmemh("Simulation/program.mem", mem);
+    $readmemh("program.mem", mem);
 end
 
 assign instruction = mem[A];
