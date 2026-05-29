@@ -1,0 +1,22 @@
+00800093 == addi x1, x0, 8
+00900113 == addi x2, x0, 9
+00208033 == add x0, x1, x2
+001101b3 == add x3, x2, x1
+402181b3 == sub x3, x3, x2
+00000463 == beq x0, x0, .label
+40210133 == sub x2, x2, x2
+00210133 == .label: add x2, x2, x2
+00302023 == sw x3, 0(x0)
+00002203 == lw x4, 0(x0)
+00225213 == srli x4, x4, 2
+00002083 == lw x1, 0(x0)
+00202023 == sw x2, 0(x0)
+001102b3 == add x5, x2, x1
+
+#BenchMark 1 #Sum till n numbers.
+00500093 == addi x1, x0, 5
+00000133 == add x2, x0, x0
+00110133 == .loop: add x2, x2, x1
+fff08093 == addi x1, x1, -1
+fe009ce3 == bne x1, x0, .loop offset = -8
+00000063 == beq x0, x0, 0
