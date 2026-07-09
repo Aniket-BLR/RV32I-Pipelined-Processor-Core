@@ -1,0 +1,2 @@
+# RV32I 5-Stage Pipelined Processor Core
+This is an individual project, that implements an FPGA synthesizable, 32-bit RISC-V RV32I processor core. The processor is split into the classical 5 stages, Instruction Fetch, Decode, Execute, Memory and Writeback stage. In addition it includes a Hazard Unit, responsible for handling both control and data hazards. It follows the Harvard Architecture, wherein the Data Memory and Instruction Memory are Isolated. The maximum speed achieved thus far is around 53MHz. 
