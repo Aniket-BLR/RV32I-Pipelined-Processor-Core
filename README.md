@@ -53,6 +53,8 @@ PC + 4 is calculated within this stage and directly sent back to the MUX at the 
 - Instruction Fetched
 - PC associated with Instruction fetched
 - PC+4 a.k.a the PC of next instruction.
+
+![IF Stage](IF_Stage.png)
   
 ### Decode Stage
 The decode stage consists of 3 sub units. This stage is accountable for generating the correct control signals, preparing required data and essentially making sense of the 32-bit instruction provided by the Fetch stage. It also houses the Register File, which is a 32 x 32 grid of Flip Flops. 
