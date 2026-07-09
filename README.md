@@ -46,4 +46,21 @@ generate
     assign meminput[30] = 1'b0;
 endgenerate
 ```
-In this, the address given is first right shifted by 2 places, instantly making it a multiple of 4. Hence, the instruction memory will always recieve a valid, though not necessarily correct,  address. 
+In this, the address given is first right shifted by 2 places, instantly making it a multiple of 4. Hence, the instruction memory will always recieve a valid, though not necessarily correct,  address. The job of the processor is not to decide whether the location provided is semantically correct as intended by user or not. It's supposed to simply keep processing the instructions that are provided to it. 
+
+PC + 4 is calculated within this stage and directly sent back to the MUX at the start. The memory unit outputs the 32 bit instruction recieved. and sends it to IF_D pipeline register, to be forwarded to Decode Stage in the subsequent clock cycle. 
+3 things are forwarded to Decode Stage not necessarily to be used by it:
+- Instruction Fetched
+- PC associated with Instruction fetched
+- PC+4 a.k.a the PC of next instruction.
+  
+### Decode Stage
+The decode stage consists of 3 sub units. This stage is accountable for generating the correct control signals, preparing required data and essentially making sense of the 32-bit instruction provided by the Fetch stage. It also houses the Register File, which is a 32 x 32 grid of Flip Flops. 
+
+The 3 subsystems in this stage are:
+- Register File
+- Extend Unit
+- Control Unit
+
+#### 1.Extend Unit
+This unit is responsible for decoding the instruction and inferring the immediate value intended by instruction. It should be noted that every instruction does not necessarily have a immediate value. Yet, the Extend Unit, being largely combinational in nature, always provides an interpretation. It is up to the subsequent stages to decide whether or not to use the interpretted immediate value.
