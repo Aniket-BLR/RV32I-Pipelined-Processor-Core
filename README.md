@@ -101,4 +101,8 @@ The distinct opcodes for each instruction type are as follows:
 6. B-Type
     - all    : 1_(1)_0_(0)_011
 ```
-The bits in brackets are the ones being passed into the Extend Unit as control signals. 
+The bits in brackets are the ones being passed into the Extend Unit as control signals. The Extend Unit logic can be understood by the diagram below: 
+
+![Extend_Unit](Extend_Unit.png)
+
+I-Type, lb, and jal instructions use the same immediate encoding pattern. Thus they are all routed through a common "decoder" unit. As is seen in the diagram, the 25 bits are processed parellely and in a combinational manner. MUX decides which output to use. 
