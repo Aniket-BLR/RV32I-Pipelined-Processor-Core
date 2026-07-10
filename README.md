@@ -66,3 +66,39 @@ The 3 subsystems in this stage are:
 
 #### 1.Extend Unit
 This unit is responsible for decoding the instruction and inferring the immediate value intended by instruction. It should be noted that every instruction does not necessarily have a immediate value. Yet, the Extend Unit, being largely combinational in nature, always provides an interpretation. It is up to the subsequent stages to decide whether or not to use the interpretted immediate value.
+
+The Extend Unit takes as input 3 control signals:
+- ImmControl (3 bit)
+- op_5 (2nd Bit of opcode from MSB)
+- op_3 (4th bit of opcode from MSB)
+
+Aside from these, it has been noticed that all the instruction types within the RV32I ISA, will, if they do, have their immediate field present within the first 25 bits of the instruction in some form or the other. These 25 bits are then parellely decoded for each instruction type. They are then passed through the MUX layer, with the appropriate control signals. The output is a 32 bit immediate value. 
+
+```verilog
+wire [31:0]U, Ilbjalr, S, jal, B, t0, t1;
+assign U = {immediate[24:5], 12'b0};
+assign Ilbjalr = {{20{immediate[24]}}, immediate[24:13]};
+assign S = {{20{immediate[24]}}, immediate[24:18], immediate[4:0]};
+assign jal = {{11{immediate[24]}}, immediate[24], immediate[12:5], immediate[13], immediate[23:14], 1'b0};
+assign B = {{19{immediate[24]}}, immediate[24], immediate[0], immediate[23:18], immediate[4:1], 1'b0};
+```
+In the decoding of immediate values for each instruction type, no specific logic has been used. As specified, by the ISA, the immediate has been unscrambled. The logical reasoning is involved in the MUX process. 
+```text
+The distinct opcodes for each instruction type are as follows:
+1. U-Type
+    - lui    : 0_(1)_1_(0)_111
+    - auipic : 0_(0)_1_(0)_111
+2. I-Type
+    - all    : 0_(0)_1_(0)_011
+    - loads  : 0_(0)_0_(0)_011
+3. R-Type
+    - all    : 0_(1)_1_(0)_011
+4. S-Type
+    - all    : 0_(1)_0_(0)_011
+5. J-Type
+    - jal    : 1_(1)_0_(1)_111
+    - jalr   : 1_(1)_0_(0)_111
+6. B-Type
+    - all    : 1_(1)_0_(0)_011
+```
+The bits in brackets are the ones being passed into the Extend Unit as control signals. 
