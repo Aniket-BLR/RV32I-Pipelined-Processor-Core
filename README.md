@@ -106,3 +106,6 @@ The bits in brackets are the ones being passed into the Extend Unit as control s
 ![Extend_Unit](Extend_Unit.png)
 
 I-Type, lb, and jal instructions use the same immediate encoding pattern. Thus they are all routed through a common "decoder" unit. As is seen in the diagram, the 25 bits are processed parellely and in a combinational manner. MUX decides which output to use. 
+
+##### Control Mechanism:
+The control signals provided to the Extend Unit has been created, solely by inspecting the opcodes of the respective, extensions. 
