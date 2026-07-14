@@ -116,10 +116,25 @@ The Opcode is indexed as MSB: Op_6 to LSB: Op_0. The differentiator bits have be
 
 The logic I used, relies mostly on re using the opcode bits. This reduces the resources dedicated to any calculation circuit. However it does come at the cost of a larger fanout of opcode bits. 
 
-#### 3.Register File
+#### 2.Register File
 Before moving on I want to shed light on the fact, that this project was made as my first substantial Verilog project. It was designed as I learnt the language. Thus, much of the code, focuses on underlying hardware clarity rather than on the behavorial constructs of the Verilog language. 
 
 That being said, the register file has been instantiated as 32 lines of 32-bit registers. For the purpose of writing a combinational decoder circuit has been implemented that decides which register should be open for writing. The input data is visible to all registers. Similarly a reader tree combinational circuit has been implemented using 2to1 Multiplexers to decide which register to read from. 2 such units are instantiated to read RS1 and RS2 simultaneously. 
 
 The register file inputs 3 5-bit adresses, 32-bit write data, write enable signal, reset signal and outputs, the data of RS1 and RS2 simultaneously. **It writes on the negative edge of clock. This allows signals to stabilize, and also write to complete without having to stall the pipeline.**
 
+#### 3.Control Unit
+The control unit is the heart of the processor. The signals it generates, conduct the movement of the Datapath and are responsible for controlling computationa and all the important functions a processor will need to perform. 
+
+The control Unit outputs the following signals:
+- RegW
+- MemW
+- Jump
+- Branch
+- ALUSrc
+- ALU_Sub_Ctrl
+- opcode_5
+- opcode_3
+- funct_7C
+
+I shall not explain the genesis of ALU related signals here as they require some context of the ALU itself. I will explain this under the EX stage. 
