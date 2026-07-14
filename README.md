@@ -108,4 +108,18 @@ The bits in brackets are the ones being passed into the Extend Unit as control s
 I-Type, lb, and jal instructions use the same immediate encoding pattern. Thus they are all routed through a common "decoder" unit. As is seen in the diagram, the 25 bits are processed parellely and in a combinational manner. MUX decides which output to use. 
 
 ##### Control Mechanism:
-The control signals provided to the Extend Unit has been created, solely by inspecting the opcodes of the respective, extensions. 
+The control signals provided to the Extend Unit has been created, solely by inspecting the opcodes of the respective, extensions. It can be better understood by looking at the diagram provided below: 
+
+![Extend Unit Control Logic](Extend_Cont_Logic.png)
+
+The Opcode is indexed as MSB: Op_6 to LSB: Op_0. The differentiator bits have been highlighted in green for readability. R-Type doesn't have an immediate field and hence doesn't require the output of Extend Unit. Hence, it has been ignored. 
+
+The logic I used, relies mostly on re using the opcode bits. This reduces the resources dedicated to any calculation circuit. However it does come at the cost of a larger fanout of opcode bits. 
+
+#### 3.Register File
+Before moving on I want to shed light on the fact, that this project was made as my first substantial Verilog project. It was designed as I learnt the language. Thus, much of the code, focuses on underlying hardware clarity rather than on the behavorial constructs of the Verilog language. 
+
+That being said, the register file has been instantiated as 32 lines of 32-bit registers. For the purpose of writing a combinational decoder circuit has been implemented that decides which register should be open for writing. The input data is visible to all registers. Similarly a reader tree combinational circuit has been implemented using 2to1 Multiplexers to decide which register to read from. 2 such units are instantiated to read RS1 and RS2 simultaneously. 
+
+The register file inputs 3 5-bit adresses, 32-bit write data, write enable signal, reset signal and outputs, the data of RS1 and RS2 simultaneously. **It writes on the negative edge of clock. This allows signals to stabilize, and also write to complete without having to stall the pipeline.**
+
