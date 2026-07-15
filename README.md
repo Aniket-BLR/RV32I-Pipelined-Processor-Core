@@ -138,3 +138,7 @@ The control Unit outputs the following signals:
 - funct_7C
 
 I shall not explain the genesis of ALU related signals here as they require some context of the ALU itself. I will explain this under the EX stage. 
+The entire logic table is summarised below: 
+
+![Control Signal Table](Control_Unit.png)
+
