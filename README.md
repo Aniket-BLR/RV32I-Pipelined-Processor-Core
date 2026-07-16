@@ -242,6 +242,8 @@ The opcode[6] and opcode[2] of the target instructions are same. However R-Type 
 When ALUSrc = 1 => The 2nd operand going into ALU is an immediate. 
 
 ##### 7.ResultSrc:
+This control signal travels with the instruction to WriteBack stage. It dictates which data will be written to the register file if any.
+
 The logic implemented is as follows:
 
 ```verilog
@@ -260,5 +262,11 @@ From the table of control signals it is obvious, that for the RV32I ISA, when wr
 - Memory_Result
 
 Thus the writeback MUX will require 5 distinct signals. 
-It is clear that ImmExt, is required ONLY by lui. Thus first we check for lui. It was observed that only lui has opcode[6], opcode[4], opcode[2] in the pattern (011). Thus it is used to identify lui instruction specifically. 
+It is clear that ImmExt, is required ONLY by lui. Thus first we check for lui. It was observed that only U - Type instructions have opcode[6], opcode[4], opcode[2] in the pattern (011). 
 Then, w1 = (111) which is assigned to ImmExt. 
+
+The logic can be better understood from the image below:
+
+![Result Source](ResultSrc.png)
+
+### Execute Stage 
