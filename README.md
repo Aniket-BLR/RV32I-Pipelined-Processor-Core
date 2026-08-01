@@ -261,7 +261,7 @@ From the table of control signals it is obvious, that for the RV32I ISA, when wr
 - ALU Result
 - Memory_Result
 
-Thus the writeback MUX will require 5 distinct signals. 
+Thus the write back MUX will require 5 distinct signals. 
 It is clear that ImmExt, is required ONLY by lui. Thus first we check for lui. It was observed that only U - Type instructions have opcode[6], opcode[4], opcode[2] in the pattern (011). 
 Then, w1 = (111) which is assigned to ImmExt. 
 
@@ -270,3 +270,14 @@ The logic can be better understood from the image below:
 ![Result Source](ResultSrc.png)
 
 ### Execute Stage 
+This stage consists of ALU and a separate unit to perform additions on PC. Since program counter will always undergo an addition operation, under appropriate instructions, it is prudent to assign a separate execution unit that only performs addition on PC. This helps take the load off the ALU and ensure that ALU is concerned only with operations on registers and Immediate values. 
+
+#### Arithmetic Logical Unit:
+The ALU fundamentally performs the following computations:
+1. ADD
+2. XOR
+3. OR
+4. AND
+5. SHIFTING
+
+The truly independent computations are AND, XOR and OR. The rest share resources and with minor alterations to input and output produce a total of 9 different results. The results are computed in parallel, the results being chosen eventually by a MUX. The results are used, to also set flags, mostly used by B-Type instructions. 
