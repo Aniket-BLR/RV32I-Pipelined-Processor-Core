@@ -280,4 +280,22 @@ The ALU fundamentally performs the following computations:
 4. AND
 5. SHIFTING
 
-The truly independent computations are AND, XOR and OR. The rest share resources and with minor alterations to input and output produce a total of 9 different results. The results are computed in parallel, the results being chosen eventually by a MUX. The results are used, to also set flags, mostly used by B-Type instructions. 
+The truly independent computations are AND, XOR and OR. The rest share resources and with minor alterations to input and output produce a total of 9 different results. The results are computed in parallel, the results being chosen eventually by a MUX. The results are used, to also set flags, mostly used by B-Type instructions.
+
+The overview of the ALU architecture is as shown below:
+
+![ALU](ALU2.png)
+
+The ALU takes as input, RS1 and RS2, the two 32-bit operands. The control signals are, 3-bit ALU_Ctrl, 1-bit funct7 [5] and 1-bit ALU_Sub_Ctrl. 
+The results and their corresponding ALU_Ctrl are listed below: 
+- 000 : Add/Sub
+- 011 : SLTU
+- 010 : SLT
+- 100 : XOR
+- 111 : AND
+- 110 : OR
+- 101 : SRL/SRLi/SRA/SRAi/SLL/SLLi
+- 001 : 
+
+Addition and subtraction pass through the same adder unit. In case of subtraction, we do 2's complement addition, by inverting and adding 1. Since, only for subtraction, Cin = 1, ALU_Sub_Ctrl controls both the operand and Cin. 
+From the adder unit, we get many useful results. By performing a bitwise OR on the 32-bit result, we get the zero flag. Similarly, many of the results are carried forward to SLT/U unit. 
