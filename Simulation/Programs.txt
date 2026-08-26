@@ -1,3 +1,4 @@
+#TestCode: successive load store. 
 00800093 == addi x1, x0, 8
 00900113 == addi x2, x0, 9
 00208033 == add x0, x1, x2
@@ -20,3 +21,64 @@
 fff08093 == addi x1, x1, -1
 fe009ce3 == bne x1, x0, .loop offset = -8
 00000063 == beq x0, x0, 0
+
+ADDR      HEX           ASSEMBLY
+0x0000    0x123450B7    lui x1, 0x12345
+0x0004    0x00001117    auipc x2, 0x1
+0x0008    0x06400193    addi x3, x0, 100
+0x000C    0xFCE00213    addi x4, x0, -50
+0x0010    0x0C81A293    slti x5, x3, 200
+0x0014    0x0321B313    sltiu x6, x3, 50
+0x0018    0x0FF1C393    xori x7, x3, 255
+0x001C    0x00F1E413    ori x8, x3, 15
+0x0020    0x00F1F493    andi x9, x3, 15
+0x0024    0x00219513    slli x10, x3, 2
+0x0028    0x00125593    srli x11, x4, 1
+0x002C    0x40125613    srai x12, x4, 1
+0x0030    0x004186B3    add x13, x3, x4
+0x0034    0x40418733    sub x14, x3, x4
+0x0038    0x009197B3    sll x15, x3, x9
+0x003C    0x00322833    slt x16, x4, x3
+0x0040    0x003238B3    sltu x17, x4, x3
+0x0044    0x0041C933    xor x18, x3, x4
+0x0048    0x009259B3    srl x19, x4, x9
+0x004C    0x40925A33    sra x20, x4, x9
+0x0050    0x0041EAB3    or x21, x3, x4
+0x0054    0x0041FB33    and x22, x3, x4
+0x0058    0x00002BB7    lui x23, 0x2
+0x005C    0x00DBA023    sw x13, 0(x23)
+0x0060    0x00EB9223    sh x14, 4(x23)
+0x0064    0x00FB8423    sb x15, 8(x23)
+0x0068    0x000BAC03    lw x24, 0(x23)
+0x006C    0x004B9C83    lh x25, 4(x23)
+0x0070    0x004BDD03    lhu x26, 4(x23)
+0x0074    0x008B8D83    lb x27, 8(x23)
+0x0078    0x008BCE03    lbu x28, 8(x23)
+0x007C    0x00318463    beq x3, x3, BEQ_OK
+0x0080    0x3E700E93    addi x29, x0, 999
+0x0084    0x00100E93    addi x29, x0, 1
+0x0088    0x00419463    bne x3, x4, BNE_OK
+0x008C    0x3E700E93    addi x29, x0, 999
+0x0090    0x001E8E93    addi x29, x29, 1
+0x0094    0x00324463    blt x4, x3, BLT_OK
+0x0098    0x3E700E93    addi x29, x0, 999
+0x009C    0x001E8E93    addi x29, x29, 1
+0x00A0    0x0041D463    bge x3, x4, BGE_OK
+0x00A4    0x3E700E93    addi x29, x0, 999
+0x00A8    0x001E8E93    addi x29, x29, 1
+0x00AC    0x0041E463    bltu x3, x4, BLTU_OK
+0x00B0    0x3E700E93    addi x29, x0, 999
+0x00B4    0x001E8E93    addi x29, x29, 1
+0x00B8    0x00327463    bgeu x4, x3, BGEU_OK
+0x00BC    0x3E700E93    addi x29, x0, 999
+0x00C0    0x001E8E93    addi x29, x29, 1
+0x00C4    0x00800FEF    jal x31, JAL_OK
+0x00C8    0x3E700F13    addi x30, x0, 999
+0x00CC    0x00100F13    addi x30, x0, 1
+0x00D0    0x00000297    auipc x5, 0
+0x00D4    0x00C28367    jalr x6, 12(x5)
+0x00D8    0x3E700F13    addi x30, x0, 999
+0x00DC    0x001F0F13    addi x30, x30, 1
+0x00E0    0x0FF0000F    fence
+0x00E4    0x00000073    ecall
+0x00E8    0x00100073    ebreak

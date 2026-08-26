@@ -87,8 +87,8 @@ module cpu_testbench;
 
     initial begin
         $display("====STARTING PROGRAM: COUNT TO N NUMBERS====");
-        $display("====        AIM: BRANCH STRESSING       ====");
+        $display("====        AIM: TEST IT ALL       ====");
         #2 PReset = 1'b1;
-        #100 $finish;
+        #150 $finish;
     end
 endmodule

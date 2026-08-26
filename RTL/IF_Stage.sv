@@ -19,15 +19,22 @@ generate
     assign meminput[30] = 1'b0;
 endgenerate
 
+logic [31:0] tPCF_delayed, tPCPlus4_delayed;
+
+always_ff @(posedge CLK) begin : blockName
+    tPCF_delayed <= tPCF; 
+end
+assign tPCPlus4_delayed = tPCF_delayed + 32'd4; 
+
 // MEGA OPTIMIZATION BEGINS
 assign tPCPlus4 = tPCF + 32'd4;
 // FullAdder32Bits FA_IF_Stage (.Op1(tPCF), .Op2(32'd4), .Cin(1'b0), .R(tPCPlus4));
 
 //MEGA OPTIMIZATION ENDS
-assign PCPlus4F = tPCPlus4;
-assign PCF = tPCF;
+assign PCPlus4F = tPCPlus4_delayed;
+assign PCF = tPCF_delayed;
 
-InstructionMemory IM_IF_Stage(.A(meminput), .instruction(instruction));
+InstructionMemory IM_IF_Stage(.A(meminput), .instruction(instruction), .CLK(CLK), .reset(MegaResetIF));
 
 endmodule
 

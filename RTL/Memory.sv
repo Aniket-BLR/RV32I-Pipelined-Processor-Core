@@ -1,7 +1,8 @@
 `timescale 1ns/1ps
 module InstructionMemory (
     input [31:0]A,
-    output [31:0]instruction 
+    input CLK, reset, 
+    output reg [31:0]instruction 
 );
 
 reg [31:0] mem [0:1023];
@@ -13,9 +14,18 @@ initial begin
 end
 
 initial begin
-    $readmemh("program.mem", mem);
+    $readmemh("Simulation/program.mem", mem);
 end
 
-assign instruction = mem[A];
+always @(posedge CLK) begin
+    if (!reset) begin
+        instruction <= '0; 
+    end else begin
+        instruction <= mem[A];
+    end 
+end
+
+//Hoping to simulate SRAM behavior with this
+//assign instruction = mem[A];
 
 endmodule
